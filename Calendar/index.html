@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<head>
+<meta charset="utf-8"/>
+<title>PLEASE SIGN IN</title>
+<style type="text/css">
+body{
+	width: 760px; /* how wide to make your web page */
+	background-color: teal; /* what color to make the background */
+	margin: 0 auto;
+	padding: 0;
+	font:12px/16px Verdana, sans-serif; /* default font */
+}
+div#main{
+	background-color: #FFF;
+	margin: 0;
+	padding: 10px;
+}
+.button {
+    background-color: #4259f4;
+    border: none;
+    color: white;
+    padding: 10px 24px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 10px;
+    margin: 4px 2px;
+    cursor: pointer;
+}
+</style>
+</head>
+<body><div id="main">
+<div>
+	<form method="post" action="login.php">
+		<p>username<input type="text" id="username" name="username"></p>
+		<p>password<input type="text" id="pwd" name="pwd"></p>
+		<button class ="button" id="login_btn">Log In</button>
+	</form>
+	</div>
+	<div>
+
+	<button class="button" id= "signup_btn">sign up</button>
+	<button onclick="{location.href='/~sunny/module5/tmp_calendar.html'}">View Calendar</button>
+	<button class="button" id= "changePwd_btn" onclick="{location.href='/~sunny/module5/ChangePWD.html'}">Forget the password</button>
+	</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script type="text/javascript">
+
+
+
+</script>
+</div></body>
+</html>

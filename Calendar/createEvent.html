@@ -1,0 +1,138 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>calculation</title>
+<style type="text/css">
+body{
+    width: 760px; /* how wide to make your web page */
+    background-color: teal; /* what color to make the background */
+    margin: 0 auto;
+    padding: 0;
+    font:12px/16px Verdana, sans-serif; /* default font */
+}
+div.main{
+    background-color: #FFF;
+    margin: 0;
+    padding: 10px;
+}
+div.header{
+    background-color: #7FFF00;
+    margin: 0 auto;
+}
+div.article{
+    background-color: #FFF8DC; /* what color to make the background */
+    margin: 0 auto;
+    padding: 0;
+    font:12px/16px Verdana, sans-serif;
+}
+.button {
+    background-color: #4CAF50;
+    border: none;
+    color: white;
+    padding: 10px 24px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 10px;
+    margin: 4px 2px;
+    cursor: pointer;
+}
+</style>
+</head>
+<body>
+<p>Event Subject:<br/>
+<input type = "text" id = "subject" name = "subject" ></p>
+<p>Event Description:<br/>
+<input type = "text" id = "description" name = "description" style = "width:500px; height:300px" ></p>
+<p>Month<select id = "month">
+<option value="01">Jan</option>
+<option value="02">Feb</option>
+<option value="03">Mar</option>
+<option value="04">Apr</option>
+<option value="05">May</option>
+<option value="06">Jun</option>
+<option value="07">July</option>
+<option value="08">Aug</option>
+<option value="09">Sep</option>
+<option value="10">Oct</option>
+<option value="11">Nov</option>
+<option value="12">Dec</option>
+</select>
+Day<select id = "day">
+<option value="01">1</option>
+<option value="02">2</option>
+<option value="03">3</option>
+<option value="04">4</option>
+<option value="05">5</option>
+<option value="06">6</option>
+<option value="07">7</option>
+<option value="08">8</option>
+<option value="09">9</option>
+<option value="10">10</option>
+<option value="11">11</option>
+<option value="12">12</option>
+<option value="13">13</option>
+<option value="14">14</option>
+<option value="15">15</option>
+<option value="16">16</option>
+<option value="17">17</option>
+<option value="18">18</option>
+<option value="19">19</option>
+<option value="20">20</option>
+<option value="21">21</option>
+<option value="22">22</option>
+<option value="23">23</option>
+<option value="24">24</option>
+<option value="25">25</option>
+<option value="26">26</option>
+<option value="27">27</option>
+<option value="28">28</option>
+<option value="29">29</option>
+<option value="30">30</option>
+<option value="31">31</option>
+</select>Year<input type = "text" id = "year" name = "year" ></p>
+<p>choose a tag<select id = "tag">
+    <option value="null">NULL</option>
+<option value="important">Important</option>
+<option value="vacation">Vacation</option>
+</select></p>
+<button class='button' type = "submit" name = "button" id = "button" value = "button">Save It</button>
+<div class='header' id="solution"></div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+<script type="text/javascript">
+
+document.getElementById("button").addEventListener("click",saveEvent, false);
+function saveEvent(){
+    var year = document.getElementById("year").value;
+	var month = document.getElementById("month").value;
+    var day = document.getElementById("day").value;
+    var subject = document.getElementById("subject").value;
+    var description = document.getElementById("description").value;
+    var tag = document.getElementById("tag").value;
+
+        $.ajax ({
+        url: 'createEvent.php',
+        type: 'post',
+        data: {
+            'day' : day,
+            'month': month,
+            'year' : year,
+            'subject' : subject,
+            'description' :description,
+            'tag' : tag
+        },
+        success: function (responseData) {
+            console.log(responseData);
+            if(responseData["success"] == true){
+                alert("You've registered!");
+                
+            }
+        }
+    });
+}
+
+</script>
+</body>
+</html>

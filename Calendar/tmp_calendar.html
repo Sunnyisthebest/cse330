@@ -1,0 +1,503 @@
+<!-- css style is from w3school -->
+<!DOCTYPE html>
+<html>
+<head>
+
+<style>
+* {box-sizing:border-box;}
+ul {list-style-type: none;}
+body {font-family: Verdana,sans-serif; background-image:url("flowers.jpg");background-repeat: no-repeat;}
+  #external-events {
+    float: left;
+    width: 150px;
+    padding: 0 10px;
+    text-align: left;
+    }
+    
+  #external-events h4 {
+    font-size: 16px;
+    margin-top: 0;
+    padding-top: 1em;
+    }
+    
+  .external-event { /* try to mimick the look of a real event */
+    margin: 10px 0;
+    padding: 2px 4px;
+    background: #3366CC;
+    color: #fff;
+    font-size: .85em;
+    cursor: pointer;
+    }
+    
+  #external-events p {
+    margin: 1.5em 0;
+    font-size: 11px;
+    color: #666;
+    }
+    
+  #external-events p input {
+    margin: 0;
+    vertical-align: middle;
+    }
+
+.month {
+    padding: 70px 25px;
+    width: 100%;
+    background: #4259f4;
+}
+
+.month ul {
+    margin: 0;
+    padding: 0;
+}
+
+.month ul li {
+    color: white;
+    font-size: 20px;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+}
+
+
+.month .prev {
+    float: left;
+    padding-top: 10px;
+}
+
+.month .next {
+    float: right;
+    padding-top: 10px;
+}
+
+.weekdays {
+    margin: 0;
+    padding: 10px 0;
+    background-color: #ddd;
+}
+
+.weekdays li {
+    display: inline-block;
+    width: 13.6%;
+    color: #666;
+    text-align: center;
+}
+
+.days {
+    padding: 10px 0;
+    background: #eee;
+    margin: 0;
+}
+
+.days li {
+    list-style-type: none;
+    display: inline-block;
+    width: 13.6%;
+    text-align: center;
+    margin-bottom: 5px;
+    font-size:12px;
+    color: #777;
+}
+.days-table{
+    display: inline-block;
+    width: 13.6%;
+    text-align: center;
+    margin-bottom: 5px;
+    font-size:12px;
+    color: #777;
+}
+
+.days li .active {
+    padding: 5px;
+    background: #4259f4;
+    color: white !important
+}
+.days-active {
+    padding: 5px;
+    background: #4259f4;
+    color: white !important
+}
+.button {
+    background-color: #4259f4;
+    border: none;
+    color: white;
+    padding: 10px 24px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 10px;
+    margin: 4px 2px;
+    cursor: pointer;
+}
+
+/* Add media queries for smaller screens */
+@media screen and (max-width:720px) {
+    .weekdays li, .days li {width: 13.1%;}
+}
+
+@media screen and (max-width: 420px) {
+    .weekdays li, .days li {width: 12.5%;}
+    .days li .active {padding: 2px;}
+}
+
+@media screen and (max-width: 290px) {
+    .weekdays li, .days li {width: 12.2%;}
+}
+</style>
+</head>
+<body>
+<h1>Calendar</h1>
+
+<div id="login">
+    <p>username<input type="text" id="username" name="username">password<input type="text" id="pwd" name="pwd"></p>
+    <button class ="button" id="login_btn">Log In</button>
+    <button class="button" id= "signup_btn">sign up</button>
+  <!-- <button class="button" id= "changePwd_btn" onclick="{location.href='/~sunny/module5/ChangePWD.html'}">Forget the password</button> -->
+</div>
+<div id='calender'></div>
+<div id='login_after'></div>
+<div id='createEventList'></div>
+<div id='showEventsList'></div>
+<div id = 'editEventList'></div>
+
+<!-- <script src = 'calender.js'></script> -->
+<script src = 'calendar.min.js'></script>
+
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script type="text/javascript">
+// function log(msg) {
+//     setTimeout(function() {
+//         throw new Error(msg);
+//     }, 0);
+// }
+
+
+var dates = [];
+var is_click = false;
+var event_id = 0;
+var day = new Date();
+var month = new Month(day.getFullYear(),day.getMonth());
+var user_id = null;
+
+//show year, month ,date for a date object
+var date = (function(){
+  var date_time = new Date();
+  return{
+    getDate : function(){
+      return date_time;
+    },
+    setDate : function(date_v){
+      date_time = date_v;
+    }
+  }
+})();
+
+
+ showTitle();
+showWeeks();
+showDateBox();
+
+showDate();
+
+function prevMonth(){
+      var d = date.getDate();
+      date.setDate(new Date(d.getFullYear(),d.getMonth()-1,1));
+      showDate();
+    }
+
+    function nextMonth(){
+      var d = date.getDate();
+      date.setDate(new Date(d.getFullYear(),d.getMonth()+1,1));
+      showDate();
+    }
+        function prevYear(){
+      var d = date.getDate();
+      date.setDate(new Date(d.getFullYear()-1,d.getMonth(),1));
+      showDate();
+    }
+    function nextYear(){
+      var d = date.getDate();
+      date.setDate(new Date(d.getFullYear()+1,d.getMonth(),1));
+      showDate();
+    }
+
+      var prev_month = document.getElementById("prev_month");
+      var next_month = document.getElementById("next_month");
+      // // addEvent(prev_month,'click',prevMonth);
+      // addEvent(next_month,'click',nextMonth);
+      prev_month.addEventListener("click",prevMonth, false);
+      next_month.addEventListener("click",nextMonth, false);
+            var prev_year = document.getElementById("prev_year");
+      var next_year = document.getElementById("next_year");
+      prev_year.addEventListener("click",prevYear, false);
+      next_year.addEventListener("click",nextYear, false);
+
+function editEvent(id , date_string){
+  //hide all date
+}
+     
+
+function showEvent(data,date_string){
+  //写showEvent的格式； 另外加edit event 的button
+//用event_id 设成每一个event-div 的id
+//将id传给 edit 和 delete button， 如calculator
+
+}
+
+
+function showTitle(){
+  var title = document.createElement("div");
+  title.className = 'month';
+  title.innerHTML = "<ul id = 'calendar_title'><li class='prev' id='prev_year'= >&#10094;</li><li class='prev' id='prev_month' >&#10094;</li><li style='text-align:center' id = 'cur_month'><br></li><li class='next' id='next_month'>&#10095;</li><li class='next' id='next_year'>&#10095;</li></ul>";
+  document.getElementById('calender').appendChild(title); 
+}
+
+function showWeeks(){
+  var weeks = document.createElement("div");
+  weeks.className = "weekdays";
+  weeks.innerHTML = "<ul class=\"weekdays\" id = 'calendar_table'><li>Mon</li><li>Tue</li><li>Wed</li><li>Thu</li><li>Fri</li><li>Sat</li><li>Sun</li></ul>"
+  document.getElementById('calender').appendChild(weeks);
+}
+
+function showDateBox(){
+  var calendar_date = document.createElement("div");
+  calendar_date.className = "days";
+  calendar_date.id = "days";
+  var body_box = "";
+  for(var i=0; i<6; i++){
+    body_box +="<li></li><li></li><li></li><li></li><li></li><li></li><li></li>";
+  }
+  calendar_date.innerHTML= "<ul name = \"event_box\" class=\"days\" id =\"event_box\">"+body_box+"</ul>";
+  document.getElementById('calender').appendChild(calendar_date);
+  }
+
+  function showDate(){
+
+    //initialize variables
+    var tmp_year = date.getDate().getFullYear();
+    var tmp_month = date.getDate().getMonth()+1;
+    var tmp_day = dateToString(date.getDate()); 
+    // log(tmp_year);
+    // log(tmp_month);
+    // log(tmp_day);
+
+    //set the information in the calendar
+    document.getElementById('cur_month').innerHTML = tmp_month+"<span style='font-size:18px' id = 'cur_year'>"+"    "+tmp_year+"</span>";
+
+    var calendar_days = document.getElementById('days');
+    var calendar_days_ul = document.getElementById('event_box');
+    var calendar_day = calendar_days_ul.getElementsByTagName('li');
+    var first_day = new Date(tmp_year,tmp_month-1,1);
+    var i = 1;
+    while(i <= calendar_day.length){
+      var calendar_today = new Date(tmp_year,tmp_month-1, i-first_day.getDay());
+      var date_string = dateToString(calendar_today);
+      calendar_day[i-1].innerTest = calendar_today.getDate();
+      calendar_day[i-1].setAttribute('data',date_string);
+      calendar_day[i-1].setAttribute('id',date_string);
+
+      if(date_string == dateToString(new Date())){
+        calendar_day[i-1].className = 'days-active';
+      }
+      calendar_day[i-1].innerHTML=calendar_today.getDate();
+      i++;
+      var day_event_box = document.getElementById(date_string);
+      day_event_box.addEventListener("click", function(){
+       var day = dateToString(calendar_today);
+       alert(day);
+
+  //       var dataString = "day=" + encodeURIComponent(day);
+ 
+  // var xmlHttp = new XMLHttpRequest(); // Initialize our XMLHttpRequest instance
+  // xmlHttp.open("POST", "showEvent.php", true); // Starting a POST request (NEVER send passwords as GET variables!!!)
+  // xmlHttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded"); // It's easy to forget this line for POST requests
+  // xmlHttp.addEventListener("load", function(event){
+  //   var jsonData = JSON.parse(event.target.responseText); // parse the JSON into a JavaScript object
+  //   if(jsonData.success){  // in PHP, this was the "success" key in the associative array; in JavaScript, it's the .success property of jsonData
+  //     showEvent(jsonData.data,date_string);
+      
+  //   }else{
+  //     alert("You cannot view event in this day. "+jsonData.message);
+  //   }
+  // }, false); // Bind the callback to the load event
+  // xmlHttp.send(dataString); // Send the data
+        
+      }, true);
+      
+    }
+  }
+
+     // function showEventsfun(){
+
+     //    alert("hi");
+ 
+//}
+
+    function dateToString(date){
+      var year = date.getFullYear();
+      var month = date.getMonth()+1;
+      var day = date.getDate();
+      month = (month > 9)?'' + month:'0'+month;
+      day = (day>9)?''+day:'0'+day;
+      return year+month+day;
+    }
+
+    function changeMonth(){
+      var prev_month = document.getElementById("prev_month");
+      var next_month = document.getElementById("next_month");
+      // // addEvent(prev_month,'click',prevMonth);
+      // addEvent(next_month,'click',nextMonth);
+      prev_month.addEventListener("click",prevMonth, false);
+      next_month.addEventListener("click",nextMonth, false);
+    }
+
+    
+    
+    function changeYear(){
+      var prev_year = document.getElementById("prev_year");
+      var next_year = document.getElementById("next_year");
+      prev_year.addEventListener("click",prevYear, false);
+      next_year.addEventListener("click",nextYear, false);
+    }
+
+
+
+function loginAjax(event){
+  var username = document.getElementById("username").value; // Get the username from the form
+  var password = document.getElementById("pwd").value; // Get the password from the form
+ 
+  // Make a URL-encoded string for passing POST data:
+  var dataString = "username=" + encodeURIComponent(username) + "&password=" + encodeURIComponent(password);
+ 
+  var xmlHttp = new XMLHttpRequest(); // Initialize our XMLHttpRequest instance
+  xmlHttp.open("POST", "login.php", true); // Starting a POST request (NEVER send passwords as GET variables!!!)
+  xmlHttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded"); // It's easy to forget this line for POST requests
+  xmlHttp.addEventListener("load", function(event){
+    var jsonData = JSON.parse(event.target.responseText); // parse the JSON into a JavaScript object
+    if(jsonData.success){  // in PHP, this was the "success" key in the associative array; in JavaScript, it's the .success property of jsonData
+      alert("You've been Logged In!");
+      user_id = jsonData.user_id;
+      userLogin();
+    }else{
+      alert("You were not logged in.  "+jsonData.message);
+    }
+  }, false); // Bind the callback to the load event
+  xmlHttp.send(dataString); // Send the data
+}
+
+function SignupAjax(event){
+  var username = document.getElementById("username").value; // Get the username from the form
+  var password = document.getElementById("pwd").value; // Get the password from the form
+ 
+  // Make a URL-encoded string for passing POST data:
+  var dataString = "username=" + encodeURIComponent(username) + "&password=" + encodeURIComponent(password);
+ 
+  var xmlHttp = new XMLHttpRequest(); // Initialize our XMLHttpRequest instance
+  xmlHttp.open("POST", "signUp.php", true); // Starting a POST request (NEVER send passwords as GET variables!!!)
+  xmlHttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded"); // It's easy to forget this line for POST requests
+  xmlHttp.addEventListener("load", function(event){
+    var jsonData = JSON.parse(event.target.responseText); // parse the JSON into a JavaScript object
+    if(jsonData.success){  // in PHP, this was the "success" key in the associative array; in JavaScript, it's the .success property of jsonData
+      alert("You've been Signed Up!");
+      user_id = jsonData.user_id;
+      userLogin();
+    }else{
+      alert("You were not logged in.  "+jsonData.message);
+    }
+  }, false); // Bind the callback to the load event
+  xmlHttp.send(dataString); // Send the data
+}
+
+function saveEventAjax(){
+    var year = document.getElementById("year").value;
+  var month = document.getElementById("month").value;
+    var day = document.getElementById("day").value;
+    var subject = document.getElementById("subject").value;
+    var description = document.getElementById("description").value;
+    var tag = document.getElementById("tag").value;
+    var share_userid = document.getElementById("share_userid").value;
+
+        $.ajax ({
+        url: 'createEvent.php',
+        type: 'post',
+        data: {
+            'day' : day,
+            'month': month,
+            'year' : year,
+            'subject' : subject,
+            'description' :description,
+            'tag' : tag,
+            'share' : share_userid
+        },
+        success: function (responseData) {
+            console.log(responseData);
+            if(responseData["success"] == true){
+                alert("New event has been saved!");
+document.getElementById("createEventList").style.display = 'none';
+                
+            }else{
+              alert("Cannot create the new event");
+            }
+        }
+    });
+
+        //
+}
+
+function deleteEventAjax(event_id){
+  var id = event_id;
+   $.ajax ({
+        url: 'deleteEvent.php',
+        type: 'post',
+        data: {
+            'id' : id
+        },
+        success: function (responseData) {
+            console.log(responseData);
+            if(responseData["success"] == true){
+                alert("Event has been deleted!");
+                
+            }else{
+              alert("Event cannot be deleted");
+            }
+        }
+    });
+
+}
+
+
+
+function createEventAjax(){
+  var create_event_div = document.createElement("div");
+  create_event_div.id = "create_event_list";
+  
+  create_event_div.innerHTML = "<p>Event Subject:<br/><input type = \"text\" id = \"create_event_subject\" name = \"subject\" ></p><p>Event Description:<br/><input type = \"text\" id = \"create_event_description\" name = \"description\" style = \"width:500px; height:300px\" ></p><p>Share to user:<br/><input type = \"text\" id = \"share_userid\" name = \"share_userid\" ></p><p>Month<select id = \"create_event_month\"><option value=\"01\">Jan</option><option value=\"02\">Feb</option><option value=\"03\">Mar</option><option value=\"04\">Apr</option><option value=\"05\">May</option><option value=\"06\">Jun</option><option value=\"07\">July</option><option value=\"08\">Aug</option><option value=\"09\">Sep</option><option value=\"10\">Oct</option><option value=\"11\">Nov</option><option value=\"12\">Dec</option></select>Day<select id = \"create_event_day\"><option value=\"01\">1</option><option value=\"02\">2</option><option value=\"03\">3</option><option value=\"04\">4</option><option value=\"05\">5</option><option value=\"06\">6</option><option value=\"07\">7</option><option value=\"08\">8</option><option value=\"09\">9</option><option value=\"10\">10</option><option value=\"11\">11</option><option value=\"12\">12</option><option value=\"13\">13</option><option value=\"14\">14</option><option value=\"15\">15</option><option value=\"16\">16</option><option value=\"17\">17</option><option value=\"18\">18</option><option value=\"19\">19</option><option value=\"20\">20</option><option value=\"21\">21</option><option value=\"22\">22</option><option value=\"23\">23</option><option value=\"24\">24</option><option value=\"25\">25</option><option value=\"26\">26</option><option value=\"27\">27</option><option value=\"28\">28</option><option value=\"29\">29</option><option value=\"30\">30</option><option value=\"31\">31</option></select>Year<input type = \"text\" id = \"create_event_year\" name = \"year\" ></p><p>choose a tag<select id = \"create_event_tag\"><option value=\"null\">NULL</option><option value=\"important\">Important</option><option value=\"vacation\">Vacation</option></select></p><button class='button' type = \"submit\" name = \"button\" id = \"create_event_button\" value = \"button\">Save It</button>"
+  document.getElementById('createEventsList').appendChild(create_event_div);
+  document.getElementById('create_event_button').addEventListener("click",saveEventAjax,false);
+
+}
+
+function userLogin(){
+    var login_after_buttons = document.createElement("div");
+  login_after_buttons.className = "button";
+  login_after_buttons.innerHTML = "<button class='button' type = \"submit\" name = \"button\" id = \"create_event\" value = \"button\">Create Event</button><button class='button' type = \"submit\" name = \"signout_btn\" id = \"signout_btn\" value = \"signout\" >Sign out</button>"
+  document.getElementById('login_after').appendChild(login_after_buttons);
+  document.getElementById('create_event').addEventListener("click",createEventAjax,false);
+  document.getElementById("login_btn").disabled = true;
+  document.getElementById("signup_btn").disabled = true;
+}
+
+
+
+document.getElementById("login_btn").addEventListener("click", loginAjax, false); // Bind the AJAX call to button click
+
+document.getElementById("signup_btn").addEventListener("click", SignupAjax, false); // Bind the AJAX call to button click
+// document.getElementById()
+
+  
+
+  </script>
+
+</body>
+</html>
