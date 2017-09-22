@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8"/>
+<title>Weather Forecast</title>
+<style type="text/css">
+body{
+	width: 8800px; /* how wide to make your web page */
+	background-color: teal; /* what color to make the background */
+	margin: 0 auto;
+	padding: 0;
+	font:12px/16px Verdana, sans-serif; /* default font */
+}
+div#main{
+	background-color: #FFF;
+	margin: 0;
+	padding: 10px;
+}
+.button {
+    background-color: #4CAF50;
+    border: none;
+    color: white;
+    padding: 10px 24px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 10px;
+    margin: 4px 2px;
+    cursor: pointer;
+}
+.weather{
+    width: 200px;
+    border: 1px solid black;
+    padding: 5px;
+    border-radius: 10px;
+    text-align: center;
+}
+
+.weather-loc{
+    font-size: 18px;
+}
+
+.weather-temp{
+    float:left;
+}
+.weather-temp::before{
+    content: 'Currently ';
+}
+
+.weather-humidity{
+    float: right;
+}
+.weather-humidity::before{
+    content: 'Humidity: ';
+}
+.weather-humidity::after{
+    content: '%';
+}
+</style>
+   <script>
+
+   function weatherForecast(event) {
+    
+        var json = JSON.parse(event.target.responseText);
+ 
+        var url1 = "http://us.yimg.com/i/us/nws/weather/gr/" + json.tomorrow.code + "ds.png";
+        
+        var url2 = "http://us.yimg.com/i/us/nws/weather/gr/" + json.dayafter.code + "ds.png";
+
+
+        document.getElementsByClassName("weather-loc")[0].innerHTML = json.location.city + "  " + json.location.state;
+        document.getElementsByClassName("weather-humidity")[0].innerHTML = json.atmosphere.humidity;
+        document.getElementsByClassName("weather-temp")[0].innerHTML = json.current.temp;
+        document.getElementsByClassName("weather-tomorrow")[0].src = url1;
+        document.getElementsByClassName("weather-dayaftertomorrow")[0].src = url2;
+       }
+
+
+     function getForecast(){
+	 
+          var xmlHttp = new XMLHttpRequest();
+          xmlHttp.open("GET", "http://classes.engineering.wustl.edu/cse330/content/weather_json.php", true);
+          xmlHttp.addEventListener("load", weathForecast, false);
+          xmlHttp.send(null);
+    }  
+      
+      
+
+      document.addEventListener("DOMContentLoaded", getForecast(), false);
+      
+   </script>
+</head>
+<body>
+<div class = "main">
+<div class="weather" id="weatherWidget">
+	<div class="weather-loc"></div>
+	<div class="weather-humidity"></div>
+	<div class="weather-temp"></div>
+	<img src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs%3D" class="weather-tomorrow" alt ="weather-tomorrow" />
+	<img src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs%3D" class="weather-dayaftertomorrow" alt="weather-dayaftertomorrow"/>
+</div>
+<input class="bsutton" type = "button" name = "refresh" id = "refresh" value = "refresh" onclick = "getForecast();" />
+</div>
+</body>
+</html>

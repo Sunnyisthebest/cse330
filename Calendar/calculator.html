@@ -1,0 +1,87 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>calculation</title>
+<style type="text/css">
+body{
+    width: 760px; /* how wide to make your web page */
+    background-color: teal; /* what color to make the background */
+    margin: 0 auto;
+    padding: 0;
+    font:12px/16px Verdana, sans-serif; /* default font */
+}
+div.main{
+    background-color: #FFF;
+    margin: 0;
+    padding: 10px;
+}
+div.header{
+    background-color: #7FFF00;
+    margin: 0 auto;
+}
+div.article{
+    background-color: #FFF8DC; /* what color to make the background */
+    margin: 0 auto;
+    padding: 0;
+    font:12px/16px Verdana, sans-serif;
+}
+.button {
+    background-color: #4CAF50;
+    border: none;
+    color: white;
+    padding: 10px 24px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 10px;
+    margin: 4px 2px;
+    cursor: pointer;
+}
+</style>
+</head>
+<body>
+<p>Your first number:<br/>
+<input type = "text" id = "first_number" name = "first_number" ></p>
+<p>Your second number:<br/>
+<input type = "text" id = "second_number" name = "second_number" ></p>
+<input type="radio" name="operation" id="add" value="add"><p>+   </p>
+<input type="radio" name="operation" id="subtract" value="subtract"><p>-   </p>
+<input type="radio" name="operation" id="multiply" value="multiply"><p>*   </p>
+<input type="radio" name="operation" id="divide" value="divide"><p>/   </p>
+<button class='button' type = "submit" name = "button" id = "button" value = "button">Calculate It</button>
+<div class='header' id="solution"></div>
+
+<script type="text/javascript">
+
+document.getElementById("button").addEventListener("click",calculator, false);
+var sol=0;
+function calculator(){
+	var n1=parseFloat(document.getElementById("first_number").value);
+	var n2=parseFloat(document.getElementById("second_number").value);
+
+	if (document.getElementById('add').checked) {
+		sol=n1+n2;
+	}
+	if (document.getElementById('subtract').checked) {
+		sol=n1-n2;
+	}
+	if (document.getElementById('multiply').checked) {
+		sol=n1*n2;
+	}
+	if (document.getElementById('divide').checked) {
+        if(n2==0){
+            alert('the second number cannot be 0')
+        }
+		sol=n1/n2;
+	}
+	
+	document.getElementById("solution").innerHTML = sol;
+		
+}
+
+
+
+</script>
+</body>
+</html>
